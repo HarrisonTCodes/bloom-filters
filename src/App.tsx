@@ -90,7 +90,9 @@ function App() {
             value={checkItemValue}
             setValue={setCheckItemValue}
           />
-          <div className="w-44 rounded-md border border-gray-400 bg-gray-200 p-1 text-center">
+          <div
+            className={`w-44 rounded-md border border-gray-400 p-1 text-center ${checkItemValueInSet ? 'bg-green-600' : 'bg-gray-200'}`}
+          >
             {checkItemValueInSet ? 'Might be in set' : 'Definitely not in set'}
           </div>
         </section>
