@@ -18,6 +18,7 @@ export default function Line({
   fromYAlign,
   toXAlign,
   toYAlign,
+  color,
 }: {
   from: HTMLElement;
   to: HTMLElement;
@@ -25,6 +26,7 @@ export default function Line({
   fromYAlign?: Alignment;
   toXAlign?: Alignment;
   toYAlign?: Alignment;
+  color: string;
 }) {
   const [path, setPath] = useState('');
 
@@ -48,8 +50,8 @@ export default function Line({
   }, [from, to]);
 
   return (
-    <svg className="pointer-events-none absolute top-0 left-0 z-0 h-full w-full">
-      <path d={path} stroke="blue" fill="none" strokeWidth={2} />
+    <svg className="pointer-events-none absolute top-0 left-0 h-full w-full">
+      <path d={path} stroke={color} fill="none" strokeWidth={1} />
     </svg>
   );
 }

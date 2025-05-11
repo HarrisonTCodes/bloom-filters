@@ -17,6 +17,10 @@ function App() {
     () => hashes.map((hash) => hash(addItemValue)),
     [hashes, addItemValue],
   );
+  const checkItemHashValues = useMemo(
+    () => hashes.map((hash) => hash(checkItemValue)),
+    [hashes, checkItemValue],
+  );
 
   return (
     <main>
@@ -46,7 +50,7 @@ function App() {
               ref={(element) => {
                 bitRefs.current[index] = element;
               }}
-              className={`h-8 w-8 ${addItemHashValues.includes(index) && addItemValue ? 'border-2 border-blue-600' : 'border border-black'}`}
+              className={`h-8 w-8 ${addItemHashValues.includes(index) && addItemValue && 'border-3 border-blue-600'} ${checkItemHashValues.includes(index) && checkItemValue && 'border-3 border-red-600'} border border-black`}
             />
           ))}
         </section>
@@ -70,6 +74,18 @@ function App() {
             from={addItemRef.current!}
             to={bitRefs.current[value]!}
             fromYAlign="bottom"
+            color="blue"
+          />
+        ))}
+
+      {checkItemValue &&
+        checkItemHashValues.map((value, index) => (
+          <Line
+            key={`add-line-${index}`}
+            from={checkItemRef.current!}
+            to={bitRefs.current[value]!}
+            fromYAlign="top"
+            color="red"
           />
         ))}
     </main>
