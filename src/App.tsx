@@ -1,9 +1,12 @@
 import { useRef } from 'react';
 import Input from './components/Input';
+import Line from './components/Line';
 
 function App() {
   const bitCount = 64;
   const bitRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const addItemRef = useRef<HTMLElement | null>(null);
+  const checkItemRef = useRef<HTMLElement | null>(null);
 
   return (
     <main>
@@ -13,10 +16,14 @@ function App() {
       </section>
 
       {/* Visualisation */}
-      <section>
+      <section className="flex w-full flex-col items-center gap-32">
         {/* Add to bloom filter */}
         <section>
-          <Input />
+          <Input
+            ref={(element) => {
+              addItemRef.current = element;
+            }}
+          />
         </section>
 
         {/* Bit array */}
@@ -34,9 +41,15 @@ function App() {
 
         {/* Check if in bloom filter */}
         <section>
-          <Input />
+          <Input
+            ref={(element) => {
+              checkItemRef.current = element;
+            }}
+          />
         </section>
       </section>
+
+      <Line from={addItemRef.current!} to={bitRefs.current[1]!} />
     </main>
   );
 }
