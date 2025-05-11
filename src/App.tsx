@@ -31,7 +31,7 @@ function App() {
         </section>
 
         {/* Bit array */}
-        <section className="grid w-fit grid-cols-16">
+        <section className="grid w-fit grid-cols-16 gap-[1px]">
           {Array.from({ length: bitCount }).map((_, index) => (
             <div
               key={`bit-${index}`}
