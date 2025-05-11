@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import Input from './components/Input';
 import Line from './components/Line';
+import { murmur3 } from 'murmurhash-js';
 
 function App() {
   const bitCount = 64;
@@ -56,7 +57,7 @@ function App() {
       </section>
 
       {addItemValue && (
-        <Line from={addItemRef.current!} to={bitRefs.current[parseInt(addItemValue)]!} />
+        <Line from={addItemRef.current!} to={bitRefs.current[murmur3(addItemValue) % bitCount]!} />
       )}
     </main>
   );
