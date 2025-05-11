@@ -1,7 +1,9 @@
+import { useRef } from 'react';
 import Input from './components/Input';
 
 function App() {
   const bitCount = 64;
+  const bitRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   return (
     <main>
@@ -20,7 +22,13 @@ function App() {
         {/* Bit array */}
         <section className="grid w-fit grid-cols-16">
           {Array.from({ length: bitCount }).map((_, index) => (
-            <div key={`bit-${index}`} className="h-8 w-8 border border-black" />
+            <div
+              key={`bit-${index}`}
+              ref={(element) => {
+                bitRefs.current[index] = element;
+              }}
+              className="h-8 w-8 border border-black"
+            />
           ))}
         </section>
 
