@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import Input from './components/Input';
 import Line from './components/Line';
 import { murmur3 } from 'murmurhash-js';
@@ -12,6 +12,10 @@ function App() {
   const [checkItemValue, setCheckItemValue] = useState('');
   const hashes = Array.from({ length: 3 }).map(
     (_, index) => (value: string) => murmur3(value, index) % bitCount,
+  );
+  const addItemHashValues = useMemo(
+    () => hashes.map((hash) => hash(addItemValue)),
+    [hashes, addItemValue],
   );
 
   return (
@@ -42,7 +46,7 @@ function App() {
               ref={(element) => {
                 bitRefs.current[index] = element;
               }}
-              className="h-8 w-8 border border-black"
+              className={`h-8 w-8 ${addItemHashValues.includes(index) && addItemValue ? 'border-2 border-blue-600' : 'border border-black'}`}
             />
           ))}
         </section>
@@ -60,11 +64,11 @@ function App() {
       </section>
 
       {addItemValue &&
-        hashes.map((hash, index) => (
+        addItemHashValues.map((value, index) => (
           <Line
             key={`add-line-${index}`}
             from={addItemRef.current!}
-            to={bitRefs.current[hash(addItemValue)]!}
+            to={bitRefs.current[value]!}
             fromYAlign="bottom"
           />
         ))}
