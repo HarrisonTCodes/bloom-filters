@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { Alignment } from '../types';
+import { type Coordinate, type Alignment } from '../types';
 
 function getElementOrigin(element: HTMLElement, xAlign?: Alignment, yAlign?: Alignment) {
   const alignToValue = { top: 0, middle: 0.5, bottom: 1 };
@@ -29,8 +29,9 @@ export default function Line({
   color: string;
 }) {
   const [path, setPath] = useState('');
+  const [circleCoordinates, setCircleCoordinates] = useState<Coordinate | undefined>();
 
-  function calculatePath() {
+  function calculateGeometry() {
     const [x1, y1] = getElementOrigin(from, fromXAlign, fromYAlign);
     const [x2, y2] = getElementOrigin(to, toXAlign, toYAlign);
 
@@ -41,17 +42,21 @@ export default function Line({
     const cp2x = isRight ? x2 - dx : x2 + dx;
 
     setPath(`M ${x1},${y1} C ${cp1x},${y1} ${cp2x},${y2} ${x2},${y2}`);
+    setCircleCoordinates({ x: x2, y: y2 });
   }
 
   useEffect(() => {
-    calculatePath();
-    window.addEventListener('resize', calculatePath);
-    return () => window.removeEventListener('resize', calculatePath);
+    calculateGeometry();
+    window.addEventListener('resize', calculateGeometry);
+    return () => window.removeEventListener('resize', calculateGeometry);
   }, [from, to]);
 
   return (
     <svg className="pointer-events-none absolute top-0 left-0 h-full w-full">
-      <path d={path} stroke={color} fill="none" strokeWidth={1} />
+      <path d={path} stroke={color} fill="none" strokeWidth={2} />
+      {circleCoordinates && (
+        <circle cx={circleCoordinates.x} cy={circleCoordinates.y} r={6} fill={color} />
+      )}
     </svg>
   );
 }
