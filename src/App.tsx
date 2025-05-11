@@ -10,6 +10,9 @@ function App() {
   const checkItemRef = useRef<HTMLElement | null>(null);
   const [addItemValue, setAddItemValue] = useState('');
   const [checkItemValue, setCheckItemValue] = useState('');
+  const hashes = Array.from({ length: 3 }).map(
+    (_, index) => (value: string) => murmur3(value, index) % bitCount,
+  );
 
   return (
     <main>
@@ -56,9 +59,15 @@ function App() {
         </section>
       </section>
 
-      {addItemValue && (
-        <Line from={addItemRef.current!} to={bitRefs.current[murmur3(addItemValue) % bitCount]!} />
-      )}
+      {addItemValue &&
+        hashes.map((hash, index) => (
+          <Line
+            key={`add-line-${index}`}
+            from={addItemRef.current!}
+            to={bitRefs.current[hash(addItemValue)]!}
+            fromYAlign="bottom"
+          />
+        ))}
     </main>
   );
 }

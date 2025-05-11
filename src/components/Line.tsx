@@ -1,18 +1,36 @@
 import { useEffect, useState } from 'react';
+import type { Alignment } from '../types';
 
-function getElementOrigin(element: HTMLElement) {
+function getElementOrigin(element: HTMLElement, xAlign?: Alignment, yAlign?: Alignment) {
+  const alignToValue = { top: 0, middle: 0.5, bottom: 1 };
   return [
-    element.getBoundingClientRect().x + element.getBoundingClientRect().width / 2,
-    element.getBoundingClientRect().y + element.getBoundingClientRect().height / 2,
+    element.getBoundingClientRect().x +
+      element.getBoundingClientRect().width * alignToValue[xAlign ?? 'middle'],
+    element.getBoundingClientRect().y +
+      element.getBoundingClientRect().height * alignToValue[yAlign ?? 'middle'],
   ];
 }
 
-export default function Line({ from, to }: { from: HTMLElement; to: HTMLElement }) {
+export default function Line({
+  from,
+  to,
+  fromXAlign,
+  fromYAlign,
+  toXAlign,
+  toYAlign,
+}: {
+  from: HTMLElement;
+  to: HTMLElement;
+  fromXAlign?: Alignment;
+  fromYAlign?: Alignment;
+  toXAlign?: Alignment;
+  toYAlign?: Alignment;
+}) {
   const [path, setPath] = useState('');
 
   function calculatePath() {
-    const [x1, y1] = getElementOrigin(from);
-    const [x2, y2] = getElementOrigin(to);
+    const [x1, y1] = getElementOrigin(from, fromXAlign, fromYAlign);
+    const [x2, y2] = getElementOrigin(to, toXAlign, toYAlign);
 
     const dx = Math.abs(x2 - x1) * 0.5;
     const isRight = x2 > x1;
