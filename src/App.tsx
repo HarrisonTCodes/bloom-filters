@@ -6,10 +6,13 @@ import { murmur3 } from 'murmurhash-js';
 function App() {
   const bitCount = 64;
   const bitRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [bitValues, setBitValues] = useState(Array(bitCount).fill(false));
+
   const addItemRef = useRef<HTMLElement | null>(null);
   const checkItemRef = useRef<HTMLElement | null>(null);
   const [addItemValue, setAddItemValue] = useState('');
   const [checkItemValue, setCheckItemValue] = useState('');
+
   const hashes = Array.from({ length: 3 }).map(
     (_, index) => (value: string) => murmur3(value, index) % bitCount,
   );
@@ -32,7 +35,7 @@ function App() {
       {/* Visualisation */}
       <section className="flex w-full flex-col items-center gap-32">
         {/* Add to bloom filter */}
-        <section>
+        <section className="flex gap-2">
           <Input
             ref={(element) => {
               addItemRef.current = element;
@@ -40,6 +43,19 @@ function App() {
             value={addItemValue}
             setValue={setAddItemValue}
           />
+          <button
+            className="rounded-md border border-gray-400 bg-gray-200 p-1 transition hover:bg-gray-300"
+            onClick={() => {
+              setBitValues((prev) => {
+                const newBitValues = [...prev];
+                addItemHashValues.forEach((index) => (newBitValues[index] = true));
+                setAddItemValue('');
+                return newBitValues;
+              });
+            }}
+          >
+            Add to set
+          </button>
         </section>
 
         {/* Bit array */}
@@ -50,7 +66,7 @@ function App() {
               ref={(element) => {
                 bitRefs.current[index] = element;
               }}
-              className={`h-8 w-8 ${addItemHashValues.includes(index) && addItemValue && 'border-3 border-blue-600'} ${checkItemHashValues.includes(index) && checkItemValue && 'border-3 border-red-600'} border border-black`}
+              className={`h-8 w-8 ${addItemHashValues.includes(index) && addItemValue && 'border-3 border-blue-600'} ${checkItemHashValues.includes(index) && checkItemValue && 'border-3 border-red-600'} border border-black ${bitValues[index] && 'bg-green-600'}`}
             />
           ))}
         </section>
