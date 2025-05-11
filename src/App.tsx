@@ -24,6 +24,23 @@ function App() {
     () => hashes.map((hash) => hash(checkItemValue)),
     [hashes, checkItemValue],
   );
+  const checkItemValueInSet = useMemo(
+    () => checkItemValue && checkItemHashValues.every((value) => bitValues[value]),
+    [checkItemValue, checkItemHashValues, bitValues],
+  );
+
+  function addItem(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setBitValues((prev) => {
+      if (!addItemValue) {
+        return prev;
+      }
+      const newBitValues = [...prev];
+      addItemHashValues.forEach((index) => (newBitValues[index] = true));
+      setAddItemValue('');
+      return newBitValues;
+    });
+  }
 
   return (
     <main>
@@ -35,7 +52,7 @@ function App() {
       {/* Visualisation */}
       <section className="flex w-full flex-col items-center gap-32">
         {/* Add to bloom filter */}
-        <section className="flex gap-2">
+        <form className="flex gap-2" onSubmit={addItem}>
           <Input
             ref={(element) => {
               addItemRef.current = element;
@@ -44,19 +61,12 @@ function App() {
             setValue={setAddItemValue}
           />
           <button
-            className="rounded-md border border-gray-400 bg-gray-200 p-1 transition hover:bg-gray-300"
-            onClick={() => {
-              setBitValues((prev) => {
-                const newBitValues = [...prev];
-                addItemHashValues.forEach((index) => (newBitValues[index] = true));
-                setAddItemValue('');
-                return newBitValues;
-              });
-            }}
+            className="w-44 rounded-md border border-gray-400 bg-gray-200 p-1 text-center transition hover:bg-gray-300"
+            type="submit"
           >
             Add to set
           </button>
-        </section>
+        </form>
 
         {/* Bit array */}
         <section className="grid w-fit grid-cols-16 gap-[1px]">
@@ -72,7 +82,7 @@ function App() {
         </section>
 
         {/* Check if in bloom filter */}
-        <section>
+        <section className="flex gap-2">
           <Input
             ref={(element) => {
               checkItemRef.current = element;
@@ -80,6 +90,9 @@ function App() {
             value={checkItemValue}
             setValue={setCheckItemValue}
           />
+          <div className="w-44 rounded-md border border-gray-400 bg-gray-200 p-1 text-center">
+            {checkItemValueInSet ? 'Might be in set' : 'Definitely not in set'}
+          </div>
         </section>
       </section>
 
