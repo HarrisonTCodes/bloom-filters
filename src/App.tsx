@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Input from './components/Input';
 import Line from './components/Line';
 
@@ -7,6 +7,8 @@ function App() {
   const bitRefs = useRef<(HTMLDivElement | null)[]>([]);
   const addItemRef = useRef<HTMLElement | null>(null);
   const checkItemRef = useRef<HTMLElement | null>(null);
+  const [addItemValue, setAddItemValue] = useState('');
+  const [checkItemValue, setCheckItemValue] = useState('');
 
   return (
     <main>
@@ -23,6 +25,8 @@ function App() {
             ref={(element) => {
               addItemRef.current = element;
             }}
+            value={addItemValue}
+            setValue={setAddItemValue}
           />
         </section>
 
@@ -45,11 +49,15 @@ function App() {
             ref={(element) => {
               checkItemRef.current = element;
             }}
+            value={checkItemValue}
+            setValue={setCheckItemValue}
           />
         </section>
       </section>
 
-      <Line from={addItemRef.current!} to={bitRefs.current[1]!} />
+      {addItemValue && (
+        <Line from={addItemRef.current!} to={bitRefs.current[parseInt(addItemValue)]!} />
+      )}
     </main>
   );
 }
