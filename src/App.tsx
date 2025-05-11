@@ -1,6 +1,8 @@
 import Input from './components/Input';
 
 function App() {
+  const bitCount = 64;
+
   return (
     <main>
       {/* Information */}
@@ -16,7 +18,11 @@ function App() {
         </section>
 
         {/* Bit array */}
-        <section>Bit array</section>
+        <section className="grid w-fit grid-cols-16">
+          {Array.from({ length: bitCount }).map((_, index) => (
+            <div key={`bit-${index}`} className="h-8 w-8 border border-black" />
+          ))}
+        </section>
 
         {/* Check if in bloom filter */}
         <section>
