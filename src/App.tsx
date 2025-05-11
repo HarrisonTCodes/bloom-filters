@@ -45,7 +45,7 @@ function App() {
   return (
     <main className="flex w-full flex-col items-center gap-4">
       {/* Information */}
-      <section className="flex max-w-[800px] flex-col gap-4">
+      <section className="flex max-w-[800px] flex-col gap-4 px-2">
         <h1 className="mt-4 text-center text-3xl font-bold">Bloom Filters</h1>
         <section>
           <h2 className="text-2xl font-medium">What is a Bloom filter?</h2>
@@ -78,7 +78,7 @@ function App() {
       {/* Visualisation */}
       <section className="flex w-full max-w-[800px] flex-col items-center gap-16 rounded-md border border-gray-400 bg-gray-100 p-8">
         {/* Add to bloom filter */}
-        <form className="flex gap-2" onSubmit={addItem}>
+        <form className="flex flex-col items-center gap-2 sm:flex-row" onSubmit={addItem}>
           <Input
             ref={(element) => {
               addItemRef.current = element;
@@ -95,20 +95,20 @@ function App() {
         </form>
 
         {/* Bit array */}
-        <section className="grid w-fit grid-cols-16 gap-[1px]">
+        <section className="grid w-fit grid-cols-8 gap-[1px] sm:grid-cols-16">
           {Array.from({ length: bitCount }).map((_, index) => (
             <div
               key={`bit-${index}`}
               ref={(element) => {
                 bitRefs.current[index] = element;
               }}
-              className={`h-8 w-8 ${addItemHashValues.includes(index) && addItemValue && 'border-3 border-blue-600'} ${checkItemHashValues.includes(index) && checkItemValue && 'border-3 border-red-600'} border border-black ${bitValues[index] && 'bg-green-600'}`}
+              className={`h-8 w-8 ${addItemHashValues.includes(index) && addItemValue && 'border-3 border-blue-600'} ${checkItemHashValues.includes(index) && checkItemValue && 'border-3 border-red-600'} border border-black ${bitValues[index] ? 'bg-green-600' : 'bg-white'}`}
             />
           ))}
         </section>
 
         {/* Check if in bloom filter */}
-        <section className="flex gap-2">
+        <section className="flex flex-col items-center gap-2 sm:flex-row">
           <Input
             ref={(element) => {
               checkItemRef.current = element;
@@ -122,29 +122,29 @@ function App() {
             {checkItemValueInSet ? 'Might be in set' : 'Definitely not in set'}
           </div>
         </section>
+
+        {addItemValue &&
+          addItemHashValues.map((value, index) => (
+            <Line
+              key={`add-line-${index}`}
+              from={addItemRef.current!}
+              to={bitRefs.current[value]!}
+              fromYAlign="bottom"
+              color="blue"
+            />
+          ))}
+
+        {checkItemValue &&
+          checkItemHashValues.map((value, index) => (
+            <Line
+              key={`add-line-${index}`}
+              from={checkItemRef.current!}
+              to={bitRefs.current[value]!}
+              fromYAlign="top"
+              color="red"
+            />
+          ))}
       </section>
-
-      {addItemValue &&
-        addItemHashValues.map((value, index) => (
-          <Line
-            key={`add-line-${index}`}
-            from={addItemRef.current!}
-            to={bitRefs.current[value]!}
-            fromYAlign="bottom"
-            color="blue"
-          />
-        ))}
-
-      {checkItemValue &&
-        checkItemHashValues.map((value, index) => (
-          <Line
-            key={`add-line-${index}`}
-            from={checkItemRef.current!}
-            to={bitRefs.current[value]!}
-            fromYAlign="top"
-            color="red"
-          />
-        ))}
     </main>
   );
 }

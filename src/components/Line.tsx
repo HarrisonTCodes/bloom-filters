@@ -29,11 +29,20 @@ export default function Line({
   color: string;
 }) {
   const [path, setPath] = useState('');
+  const [maxY, setMaxY] = useState(0);
   const [circleCoordinates, setCircleCoordinates] = useState<Coordinate | undefined>();
 
   function calculateGeometry() {
-    const [x1, y1] = getElementOrigin(from, fromXAlign, fromYAlign);
-    const [x2, y2] = getElementOrigin(to, toXAlign, toYAlign);
+    const [originX1, originY1] = getElementOrigin(from, fromXAlign, fromYAlign);
+    const [originX2, originY2] = getElementOrigin(to, toXAlign, toYAlign);
+
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+
+    const x1 = originX1 + scrollX;
+    const y1 = originY1 + scrollY;
+    const x2 = originX2 + scrollX;
+    const y2 = originY2 + scrollY;
 
     const dx = Math.abs(x2 - x1) * 0.5;
     const isRight = x2 > x1;
@@ -43,16 +52,26 @@ export default function Line({
 
     setPath(`M ${x1},${y1} C ${cp1x},${y1} ${cp2x},${y2} ${x2},${y2}`);
     setCircleCoordinates({ x: x2, y: y2 });
+    setMaxY(y1 > y2 ? y1 : y2);
   }
 
   useEffect(() => {
     calculateGeometry();
+
     window.addEventListener('resize', calculateGeometry);
-    return () => window.removeEventListener('resize', calculateGeometry);
+    window.addEventListener('scroll', calculateGeometry);
+
+    return () => {
+      window.removeEventListener('resize', calculateGeometry);
+      window.removeEventListener('scroll', calculateGeometry);
+    };
   }, [from, to]);
 
   return (
-    <svg className="pointer-events-none absolute top-0 left-0 h-full w-full">
+    <svg
+      className="pointer-events-none absolute top-0 left-0 w-full"
+      style={{ height: `${maxY + 6}px` }}
+    >
       <path d={path} stroke={color} fill="none" strokeWidth={2} />
       {circleCoordinates && (
         <circle cx={circleCoordinates.x} cy={circleCoordinates.y} r={6} fill={color} />
