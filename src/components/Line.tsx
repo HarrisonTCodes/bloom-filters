@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { type Coordinate, type Alignment } from '../types';
 
-function getElementOrigin(element: HTMLElement, xAlign?: Alignment, yAlign?: Alignment) {
+function getElementPosition(
+  element: HTMLElement,
+  xAlign: Alignment = 'middle',
+  yAlign: Alignment = 'middle',
+) {
   const alignToValue = { top: 0, middle: 0.5, bottom: 1 };
-  return [
-    element.getBoundingClientRect().x +
-      element.getBoundingClientRect().width * alignToValue[xAlign ?? 'middle'],
-    element.getBoundingClientRect().y +
-      element.getBoundingClientRect().height * alignToValue[yAlign ?? 'middle'],
-  ];
+  const rect = element.getBoundingClientRect();
+
+  return [rect.x + rect.width * alignToValue[xAlign], rect.y + rect.height * alignToValue[yAlign]];
 }
 
 export default function Line({
@@ -33,8 +34,8 @@ export default function Line({
   const [circleCoordinates, setCircleCoordinates] = useState<Coordinate | undefined>();
 
   function calculateGeometry() {
-    const [originX1, originY1] = getElementOrigin(from, fromXAlign, fromYAlign);
-    const [originX2, originY2] = getElementOrigin(to, toXAlign, toYAlign);
+    const [originX1, originY1] = getElementPosition(from, fromXAlign, fromYAlign);
+    const [originX2, originY2] = getElementPosition(to, toXAlign, toYAlign);
 
     const scrollX = window.scrollX;
     const scrollY = window.scrollY;
