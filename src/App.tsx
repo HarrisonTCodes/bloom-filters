@@ -38,25 +38,29 @@ function App() {
       <BloomFilterVisual />
 
       {/* Resources */}
-      <section className="mb-8 flex w-full max-w-[800px] flex-col px-2">
-        <h2 className="text-2xl font-medium">Resources</h2>
-        <p>Inspirations and excellent resources on the fascinating topic of Bloom filters.</p>
-        <a
-          className="mt-2 text-blue-800 hover:underline"
-          href="https://www.youtube.com/watch?v=qZNJTh2NEiU"
-        >
-          mCoding - Bloom Filters
-        </a>
-        <a className="text-blue-800 hover:underline" href="https://samwho.dev/bloom-filters/">
-          samwho - Bloom Filters
-        </a>
-        <a
-          className="text-blue-800 hover:underline"
-          href="https://ieeexplore.ieee.org/abstract/document/5751342"
-        >
-          Tarkoma, Rothenberg and Lagerspetz - Theory and Practice of Bloom Filters for Distributed
-          Systems
-        </a>
+      <section className="mb-8 flex w-full max-w-[800px] flex-col gap-4 px-2">
+        <section>
+          <h2 className="text-2xl font-medium">Resources</h2>
+          <p>Inspirations and excellent resources on the fascinating topic of Bloom filters.</p>
+        </section>
+        <section className="flex flex-col">
+          <a
+            className="text-blue-800 hover:underline"
+            href="https://www.youtube.com/watch?v=qZNJTh2NEiU"
+          >
+            mCoding - Bloom Filters
+          </a>
+          <a className="text-blue-800 hover:underline" href="https://samwho.dev/bloom-filters/">
+            samwho - Bloom Filters
+          </a>
+          <a
+            className="text-blue-800 hover:underline"
+            href="https://ieeexplore.ieee.org/abstract/document/5751342"
+          >
+            Tarkoma, Rothenberg and Lagerspetz - Theory and Practice of Bloom Filters for
+            Distributed Systems
+          </a>
+        </section>
       </section>
     </main>
   );
