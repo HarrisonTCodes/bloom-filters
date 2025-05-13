@@ -97,7 +97,7 @@ export default function BloomFilterVisual() {
             key={`add-line-${index}`}
             from={addItemRef.current!}
             to={bitRefs.current[value]!}
-            fromYAlign="bottom"
+            fromYAlign={1}
             color="blue"
           />
         ))}
@@ -107,7 +107,7 @@ export default function BloomFilterVisual() {
             key={`add-line-${index}`}
             from={checkItemRef.current!}
             to={bitRefs.current[value]!}
-            fromYAlign="top"
+            fromYAlign={0}
             color="red"
           />
         ))}

@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
-import { type Coordinate, type Alignment } from '../types';
 
-function getElementPosition(
-  element: HTMLElement,
-  xAlign: Alignment = 'middle',
-  yAlign: Alignment = 'middle',
-) {
-  const alignToValue = { top: 0, middle: 0.5, bottom: 1 };
+type Coordinate = {
+  x: number;
+  y: number;
+};
+
+function getElementPosition(element: HTMLElement, xAlign: number = 0.5, yAlign: number = 0.5) {
   const rect = element.getBoundingClientRect();
 
-  return [rect.x + rect.width * alignToValue[xAlign], rect.y + rect.height * alignToValue[yAlign]];
+  return [rect.x + rect.width * xAlign, rect.y + rect.height * yAlign];
 }
 
 export default function Line({
@@ -23,10 +22,10 @@ export default function Line({
 }: {
   from: HTMLElement;
   to: HTMLElement;
-  fromXAlign?: Alignment;
-  fromYAlign?: Alignment;
-  toXAlign?: Alignment;
-  toYAlign?: Alignment;
+  fromXAlign?: number;
+  fromYAlign?: number;
+  toXAlign?: number;
+  toYAlign?: number;
   color: string;
 }) {
   const [path, setPath] = useState('');
