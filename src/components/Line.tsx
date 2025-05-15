@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 type Coordinate = {
   x: number;
@@ -32,7 +32,7 @@ export default function Line({
   const [maxY, setMaxY] = useState(0);
   const [circleCoordinates, setCircleCoordinates] = useState<Coordinate | undefined>();
 
-  function calculateGeometry() {
+  const calculateGeometry = useCallback(() => {
     const [originX1, originY1] = getElementPosition(from, fromXAlign, fromYAlign);
     const [originX2, originY2] = getElementPosition(to, toXAlign, toYAlign);
 
@@ -53,7 +53,7 @@ export default function Line({
     setPath(`M ${x1},${y1} C ${cp1x},${y1} ${cp2x},${y2} ${x2},${y2}`);
     setCircleCoordinates({ x: x2, y: y2 });
     setMaxY(y1 > y2 ? y1 : y2);
-  }
+  }, [from, to, fromXAlign, fromYAlign, toXAlign, toYAlign]);
 
   useEffect(() => {
     calculateGeometry();
@@ -65,7 +65,7 @@ export default function Line({
       window.removeEventListener('resize', calculateGeometry);
       window.removeEventListener('scroll', calculateGeometry);
     };
-  }, [from, to]);
+  }, [from, to, calculateGeometry]);
 
   return (
     <svg
