@@ -31,7 +31,9 @@ function App() {
         <p>
           Below is an interactive Bloom filter you can add items to and check items against, with
           the parameters <code className="bg-gray-200 px-1">m = 64</code> and{' '}
-          <code className="bg-gray-200">k = 3</code>
+          <code className="bg-gray-200">k = 3</code>. Add items with the input at the top, and check
+          items against the filter with the input at the bottom, with a live representation of the
+          bit array between them.
         </p>
       </section>
 

@@ -52,6 +52,7 @@ export default function BloomFilterVisual() {
           }}
           value={addItemValue}
           setValue={setAddItemValue}
+          placeholder="Add item"
         />
         <button
           className="w-44 rounded-md border border-gray-400 bg-gray-200 p-1 text-center transition hover:bg-gray-300"
@@ -69,7 +70,7 @@ export default function BloomFilterVisual() {
             ref={(element) => {
               bitRefs.current[index] = element;
             }}
-            className={`h-8 w-8 ${addItemHashValues.includes(index) && addItemValue && 'border-3 border-blue-600'} ${checkItemHashValues.includes(index) && checkItemValue && 'border-3 border-red-600'} border border-black ${bitValues[index] ? 'bg-green-600' : 'bg-white'}`}
+            className={`h-8 w-8 ${addItemHashValues.includes(index) && addItemValue && 'border-3 border-blue-600'} ${checkItemHashValues.includes(index) && checkItemValue && (checkItemValueInSet ? 'border-3 border-green-600' : 'border-3 border-red-600')} border border-black ${bitValues[index] ? 'bg-black' : 'bg-white'}`}
           />
         ))}
       </section>
@@ -82,6 +83,7 @@ export default function BloomFilterVisual() {
           }}
           value={checkItemValue}
           setValue={setCheckItemValue}
+          placeholder="Check item"
         />
         <div
           className={`w-44 rounded-md border border-gray-400 p-1 text-center ${checkItemValueInSet ? 'bg-green-600' : 'bg-gray-200'}`}
@@ -108,7 +110,7 @@ export default function BloomFilterVisual() {
             from={checkItemRef.current!}
             to={bitRefs.current[value]!}
             fromYAlign={0}
-            color="red"
+            color={checkItemValueInSet ? 'green' : 'red'}
           />
         ))}
     </section>
